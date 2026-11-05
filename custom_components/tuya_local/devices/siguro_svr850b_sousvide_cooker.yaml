@@ -1,0 +1,209 @@
+name: Sous vide cooker
+products:
+  - id: shf2yk6fxbydc8la
+    manufacturer: Siguro
+    model: Tenderino
+    model_id: SV-R850B
+entities:
+  - entity: climate
+    dps:
+      - id: 1
+        type: boolean
+        name: hvac_mode
+        mapping:
+          - dps_val: false
+            value: "off"
+          - dps_val: true
+            value: heat
+      - id: 5
+        type: string
+        name: hvac_action
+        optional: true
+        mapping:
+          - dps_val: standby
+            value: "off"
+          - dps_val: appointment
+            value: idle
+          - dps_val: cooking
+            value: heating
+          - dps_val: done
+            value: idle
+          - dps_val: null
+            value: "off"
+      - id: 9
+        type: integer
+        name: temperature
+        unit: C
+        range:
+          min: 100
+          max: 950
+        mapping:
+          - scale: 10
+      - id: 10
+        type: integer
+        name: current_temperature
+        mapping:
+          - scale: 10
+  - entity: switch
+    name: Start
+    icon: "mdi:play"
+    dps:
+      - id: 2
+        type: boolean
+        name: switch
+  - entity: switch
+    name: Pause
+    icon: "mdi:pause"
+    dps:
+      - id: 101
+        type: boolean
+        name: switch
+  - entity: switch
+    name: Stop
+    icon: "mdi:stop"
+    dps:
+      - id: 14
+        type: boolean
+        name: switch
+        optional: true
+  - entity: select
+    name: Cooking mode
+    category: config
+    icon: "mdi:food-steak"
+    dps:
+      - id: 3
+        type: string
+        name: option
+        mapping:
+          - dps_val: vegetables
+            value: vegetables
+          - dps_val: meat
+            value: meat
+          - dps_val: shrimp
+            value: shrimp
+          - dps_val: fish
+            value: fish
+          - dps_val: chicken
+            value: chicken
+          - dps_val: drumsticks
+            value: drumsticks
+          - dps_val: beef
+            value: beef
+  - entity: number
+    name: Cooking time
+    category: config
+    class: duration
+    icon: "mdi:timer"
+    dps:
+      - id: 7
+        type: integer
+        name: value
+        unit: min
+        range:
+          min: 0
+          max: 5999
+  - entity: number
+    name: Appointment time
+    category: config
+    class: duration
+    icon: "mdi:timer-play"
+    dps:
+      - id: 6
+        type: integer
+        name: value
+        optional: true
+        unit: min
+        range:
+          min: 0
+          max: 5999
+  - entity: number
+    name: Recipe
+    category: config
+    icon: "mdi:pot-steam"
+    dps:
+      - id: 4
+        type: integer
+        name: value
+        optional: true
+        range:
+          min: 0
+          max: 999999
+  - entity: select
+    translation_key: temperature_unit
+    category: config
+    dps:
+      - id: 11
+        type: string
+        name: option
+        mapping:
+          - dps_val: c
+            value: celsius
+          - dps_val: f
+            value: fahrenheit
+  - entity: sensor
+    translation_key: time_remaining
+    category: diagnostic
+    class: duration
+    dps:
+      - id: 8
+        type: integer
+        name: sensor
+        unit: min
+  - entity: sensor
+    name: Status
+    class: enum
+    category: diagnostic
+    icon: "mdi:pot-steam-outline"
+    dps:
+      - id: 5
+        type: string
+        name: sensor
+        mapping:
+          - dps_val: standby
+            value: standby
+          - dps_val: appointment
+            value: appointment
+          - dps_val: cooking
+            value: cooking
+          - dps_val: done
+            value: done
+  - entity: sensor
+    name: Cooking history
+    category: diagnostic
+    hidden: true
+    dps:
+      - id: 16
+        type: integer
+        name: sensor
+        optional: true
+        range:
+          min: 0
+          max: 999999
+  - entity: binary_sensor
+    class: problem
+    category: diagnostic
+    dps:
+      - id: 13
+        type: bitfield
+        name: sensor
+        mapping:
+          - dps_val: 0
+            value: false
+          - value: true
+      - id: 13
+        type: bitfield
+        name: fault_code
+      - id: 13
+        type: bitfield
+        name: description
+        mapping:
+          - dps_val: 0
+            value: ok
+          - dps_val: 1
+            value: ntc_error_off
+          - dps_val: 2
+            value: ntc_error_over
+          - dps_val: 4
+            value: ntc_error_on
+          - dps_val: 8
+            value: lack_water
